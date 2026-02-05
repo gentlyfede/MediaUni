@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ChangeEvent } from "react";
 
 type Exam = {
@@ -91,9 +91,7 @@ function requireExactHeaders(headers: string[], expected: string[]) {
   const sameOrder = sameLength && got.every((h, i) => h === exp[i]);
 
   if (!sameOrder) {
-    throw new Error(
-      "Header CSV non valido.\n" + `Atteso: ${exp.join(";")}\n` + `Trovato: ${got.join(";")}`
-    );
+    throw new Error("Header CSV non valido.\n" + `Atteso: ${exp.join(";")}\n` + `Trovato: ${got.join(";")}`);
   }
 }
 
@@ -147,9 +145,7 @@ async function readFileTextUtf8OrUtf16(file: File): Promise<string> {
 
 const API_BASE =
   import.meta.env.VITE_API_BASE ??
-  (typeof window !== "undefined" && window.location.hostname === "localhost"
-    ? "http://127.0.0.1:8787"
-    : "");
+  (typeof window !== "undefined" && window.location.hostname === "localhost" ? "http://127.0.0.1:8787" : "");
 
 async function apiGetPlan(code: string) {
   return fetch(`${API_BASE}/api/plans/${encodeURIComponent(code)}`);
@@ -531,6 +527,22 @@ export default function App() {
   const [whatIfGrade, setWhatIfGrade] = useState<string>("28");
   const [status, setStatus] = useState<string>("");
 
+  // NEW: status auto-clear timer (solo per success “pulito”)
+  const statusTimerRef = useRef<number | null>(null);
+  function flashStatus(msg: string, ms = 1600) {
+    setStatus(msg);
+    if (statusTimerRef.current !== null) window.clearTimeout(statusTimerRef.current);
+    statusTimerRef.current = window.setTimeout(() => {
+      setStatus("");
+      statusTimerRef.current = null;
+    }, ms);
+  }
+  useEffect(() => {
+    return () => {
+      if (statusTimerRef.current !== null) window.clearTimeout(statusTimerRef.current);
+    };
+  }, []);
+
   const [helpOpen, setHelpOpen] = useState<boolean>(false);
   const [courseXX, setCourseXX] = useState<string>("");
   const [courseYY, setCourseYY] = useState<string>("");
@@ -659,29 +671,30 @@ export default function App() {
     }));
 
     setExams(next);
-    setStatus(`Verifico su Supabase il piano ${code}...`);
+    setStatus(`Verifico il piano ${code}...`);
 
     const checkRes = await apiGetPlan(code);
 
     if (checkRes.ok) {
-      const yes = window.confirm(`Il piano ${code} esiste già su Supabase. Vuoi sovrascrivere?`);
+      const yes = window.confirm(`Il piano ${code} esiste già. Vuoi sovrascrivere?`);
       if (!yes) {
-        setStatus("Piano caricato in UI, ma NON salvato su Supabase (annullato).");
+        setStatus("Piano caricato in UI, ma NON salvato(annullato).");
         return;
       }
     } else if (checkRes.status !== 404) {
       const txt = await checkRes.text().catch(() => "");
-      throw new Error(`Errore verifica Supabase (${checkRes.status}): ${txt}`);
+      throw new Error(`Errore verifica (${checkRes.status}): ${txt}`);
     }
 
-    setStatus(`Salvataggio su Supabase (${code})...`);
+    setStatus(`Salvataggio (${code})...`);
 
     const { res: saveRes, json } = await apiSavePlan(code, planRows);
     if (!saveRes.ok || !json?.ok) {
       throw new Error(`Errore salvataggio API: ${JSON.stringify(json)}`);
     }
 
-    setStatus(`Piano caricato e salvato su Supabase: ${code} (${planRows.length} righe).`);
+    // CHANGED: niente “Caricato su Supabase ...” fisso (feedback pulito e temporaneo)
+    flashStatus("Piano salvato.");
   }
 
   async function handleCsvUpload(e: ChangeEvent<HTMLInputElement>) {
@@ -816,8 +829,7 @@ export default function App() {
       const merged = [...prev, ...toAdd];
       const skipped = selected.length - toAdd.length;
       setStatus(
-        `Aggiunti ${toAdd.length} esami dal piano ${plan.code}` +
-          (skipped > 0 ? ` (saltati ${skipped} duplicati).` : ".")
+        `Aggiunti ${toAdd.length} esami dal piano ${plan.code}` + (skipped > 0 ? ` (saltati ${skipped} duplicati).` : ".")
       );
       return merged;
     });
@@ -838,12 +850,7 @@ export default function App() {
           <div style={styles.actions}>
             <label style={styles.btn as any}>
               Carica piano
-              <input
-                type="file"
-                accept=".csv,text/csv"
-                onChange={handleCsvUpload}
-                style={{ display: "none" }}
-              />
+              <input type="file" accept=".csv,text/csv" onChange={handleCsvUpload} style={{ display: "none" }} />
             </label>
 
             <button style={styles.btn} onClick={openLookup}>
@@ -900,8 +907,8 @@ export default function App() {
               {courseOk ? (
                 <>
                   <div style={styles.promptTop}>
-                    Prepara screenshot con codici, insegnamenti e CFU. Caricali su un’AI e chiedi di generare il file
-                    usando la domanda qui sotto.
+                    Prepara screenshot con codici, insegnamenti e CFU. Caricali su un’AI e chiedi di generare il file usando
+                    la domanda qui sotto.
                   </div>
                   <div style={styles.promptBox}>
                     <em>{buildUserPrompt(xxNum!, yyNum!)}</em>
@@ -949,11 +956,7 @@ export default function App() {
                   return (
                     <tr key={e.id}>
                       <td style={styles.td}>
-                        <input
-                          value={e.name}
-                          onChange={(ev) => updateExam(e.id, { name: ev.target.value })}
-                          style={styles.input}
-                        />
+                        <input value={e.name} onChange={(ev) => updateExam(e.id, { name: ev.target.value })} style={styles.input} />
                       </td>
 
                       <td style={styles.td}>
@@ -995,11 +998,7 @@ export default function App() {
             <label>
               <span style={{ fontSize: 13, color: "rgba(29,29,31,0.75)" }}>Esame</span>
               <div style={{ height: 6 }} />
-              <select
-                style={styles.select}
-                value={whatIfExamId}
-                onChange={(e) => setWhatIfExamId(e.target.value)}
-              >
+              <select style={styles.select} value={whatIfExamId} onChange={(e) => setWhatIfExamId(e.target.value)}>
                 {exams.map((e) => (
                   <option key={e.id} value={e.id}>
                     {e.name} ({e.cfu} CFU)
@@ -1032,7 +1031,13 @@ export default function App() {
           }}
         >
           <div style={styles.modalCard}>
-            <div style={styles.sheetTitle}>Cerca un piano già caricato e scegli quali esami importare.</div>
+            {/* CHANGED: micro-hint Apple-style (senza rovinare la UI) */}
+            <div style={styles.sheetTitle}>
+              <div>Cerca un piano già caricato e scegli quali esami importare.</div>
+              <div style={{ marginTop: 6, fontSize: 12, color: "rgba(29,29,31,0.62)" }}>
+                Inserisci le prime 4 cifre della matricola: XX e YY (es. 70/89 → 70 e 89).
+              </div>
+            </div>
 
             <div style={styles.codeRow}>
               <input
