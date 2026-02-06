@@ -8,8 +8,6 @@ const app = express();
 
 /**
  * CORS
- * - In locale va bene permissivo.
- * - In prod metti una whitelist con ORIGINS="https://tuodominio.vercel.app,https://altro..."
  */
 const ORIGINS = (process.env.ORIGINS || "")
   .split(",")
@@ -18,7 +16,7 @@ const ORIGINS = (process.env.ORIGINS || "")
 
 app.use(
   cors({
-    origin: ORIGINS.length ? ORIGINS : true, // true = riflette Origin (ok per dev)
+    origin: ORIGINS.length ? ORIGINS : true,
     methods: ["GET", "POST", "OPTIONS"],
     allowedHeaders: ["Content-Type"],
   })
@@ -93,14 +91,12 @@ app.post("/api/plans", async (req, res) => {
       return res.status(400).json({ error: "No rows" });
     }
 
-    // Validazione minima dei record
     if (!rows.every(isValidRow)) {
       return res.status(400).json({
         error: "Bad rows format (expected {codice, denominazione, cfu:int})",
       });
     }
 
-    // Normalizza / limita
     const cleaned = rows
       .map((r) => ({
         codice: String(r.codice).trim(),
@@ -114,19 +110,36 @@ app.post("/api/plans", async (req, res) => {
       return res.status(400).json({ error: "No valid rows after cleaning" });
     }
 
+    // 1) Se esiste già, blocca (non sovrascrivere)
+    const { data: existing, error: existingErr } = await supabase
+      .from("plans")
+      .select("code")
+      .eq("code", codeTrim)
+      .maybeSingle();
+
+    if (existingErr) return res.status(500).json({ error: existingErr.message });
+
+    if (existing) {
+      // 409 Conflict = richiesta in conflitto con lo stato corrente della risorsa. [web:2634]
+      return res.status(409).json({ ok: false, error: "Plan already exists", code: codeTrim });
+    }
+
+    // 2) Inserisci SOLO se non esiste (no upsert)
     const payload = {
       code: codeTrim,
-      rows: cleaned, // IMPORTANT: JSON, non stringa
+      rows: cleaned,
       updated_at: new Date().toISOString(),
     };
 
-    const { data, error } = await supabase
-      .from("plans")
-      .upsert(payload) // richiede unique/PK su code
-      .select("code,rows,updated_at")
-      .single();
+    const { data, error } = await supabase.from("plans").insert(payload).select("code,rows,updated_at").single();
 
-    if (error) return res.status(500).json({ error: error.message });
+    if (error) {
+      // Se per race condition qualcuno lo ha creato tra check e insert, torna comunque 409
+      if (String(error.message || "").toLowerCase().includes("duplicate")) {
+        return res.status(409).json({ ok: false, error: "Plan already exists", code: codeTrim });
+      }
+      return res.status(500).json({ error: error.message });
+    }
 
     return res.json({ ok: true, data });
   } catch (e) {

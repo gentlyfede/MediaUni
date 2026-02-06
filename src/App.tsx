@@ -166,9 +166,7 @@ function normKey(name: string, cfu: number) {
 }
 
 /**
- * Apple-ish theme:
- * - Usa le CSS vars definite in src/index.css (quelle che ti ho dato prima).
- * - Inline styles qui sotto richiamano var(--...) per non risultare “cheap”.
+ * Apple-ish theme
  */
 const styles = {
   page: {
@@ -178,20 +176,8 @@ const styles = {
     fontFamily:
       'system-ui, -apple-system, BlinkMacSystemFont, "SF Pro Text", "SF Pro Display", "Segoe UI", Roboto, Helvetica, Arial, sans-serif',
   } as const,
-
-  shell: {
-    maxWidth: 980,
-    margin: "0 auto",
-    padding: "28px 16px 56px",
-  } as const,
-
-  topbar: {
-    display: "flex",
-    alignItems: "center",
-    justifyContent: "center",
-    marginBottom: 14,
-  } as const,
-
+  shell: { maxWidth: 980, margin: "0 auto", padding: "28px 16px 56px" } as const,
+  topbar: { display: "flex", alignItems: "center", justifyContent: "center", marginBottom: 14 } as const,
   title: {
     margin: 0,
     fontSize: "clamp(34px, 5vw, 56px)",
@@ -199,7 +185,6 @@ const styles = {
     letterSpacing: "-0.9px",
     color: "var(--text)",
   } as const,
-
   subtitle: {
     margin: "10px auto 0",
     maxWidth: 640,
@@ -208,7 +193,6 @@ const styles = {
     fontSize: 14,
     lineHeight: 1.45,
   } as const,
-
   panel: {
     marginTop: 18,
     borderRadius: "var(--r-lg)",
@@ -219,7 +203,6 @@ const styles = {
     backdropFilter: "blur(18px) saturate(160%)",
     WebkitBackdropFilter: "blur(18px) saturate(160%)",
   } as const,
-
   actions: {
     display: "flex",
     gap: 10,
@@ -227,7 +210,6 @@ const styles = {
     justifyContent: "center",
     marginBottom: 10,
   } as const,
-
   btn: {
     padding: "10px 12px",
     borderRadius: 999,
@@ -238,7 +220,6 @@ const styles = {
     fontSize: 14,
     lineHeight: 1,
   } as const,
-
   btnFilled: {
     padding: "10px 12px",
     borderRadius: 999,
@@ -249,7 +230,6 @@ const styles = {
     fontSize: 14,
     lineHeight: 1,
   } as const,
-
   link: {
     margin: "8px auto 0",
     maxWidth: 720,
@@ -260,7 +240,6 @@ const styles = {
     cursor: "pointer",
     userSelect: "none" as const,
   } as const,
-
   status: {
     margin: "10px auto 0",
     maxWidth: 820,
@@ -269,14 +248,7 @@ const styles = {
     fontSize: 13,
     color: "rgba(29,29,31,0.72)",
   } as const,
-
-  cards: {
-    display: "grid",
-    gridTemplateColumns: "repeat(2, minmax(0, 1fr))",
-    gap: 12,
-    marginTop: 14,
-  } as const,
-
+  cards: { display: "grid", gridTemplateColumns: "repeat(2, minmax(0, 1fr))", gap: 12, marginTop: 14 } as const,
   card: {
     borderRadius: "var(--r-md)",
     border: "1px solid var(--hairline)",
@@ -287,28 +259,9 @@ const styles = {
     backdropFilter: "blur(14px) saturate(160%)",
     WebkitBackdropFilter: "blur(14px) saturate(160%)",
   } as const,
-
-  label: {
-    fontSize: 12,
-    color: "rgba(29,29,31,0.62)",
-  } as const,
-
-  value: {
-    marginTop: 6,
-    fontSize: 34,
-    fontWeight: 760,
-    letterSpacing: -0.6,
-    color: "var(--text)",
-  } as const,
-
-  sectionTitle: {
-    margin: "18px 0 10px",
-    textAlign: "center" as const,
-    fontSize: 14,
-    fontWeight: 650,
-    color: "rgba(29,29,31,0.72)",
-  } as const,
-
+  label: { fontSize: 12, color: "rgba(29,29,31,0.62)" } as const,
+  value: { marginTop: 6, fontSize: 34, fontWeight: 760, letterSpacing: -0.6, color: "var(--text)" } as const,
+  sectionTitle: { margin: "18px 0 10px", textAlign: "center" as const, fontSize: 14, fontWeight: 650, color: "rgba(29,29,31,0.72)" } as const,
   tableWrap: {
     overflowX: "auto" as const,
     borderRadius: "var(--r-md)",
@@ -316,13 +269,7 @@ const styles = {
     background: "rgba(255,255,255,0.92)",
     boxShadow: "var(--shadow-sm)",
   } as const,
-
-  table: {
-    width: "100%",
-    borderCollapse: "collapse" as const,
-    minWidth: 720,
-  } as const,
-
+  table: { width: "100%", borderCollapse: "collapse" as const, minWidth: 720 } as const,
   th: {
     fontSize: 12,
     color: "rgba(29,29,31,0.55)",
@@ -331,13 +278,7 @@ const styles = {
     borderBottom: "1px solid rgba(0,0,0,0.06)",
     background: "rgba(0,0,0,0.02)",
   } as const,
-
-  td: {
-    padding: 12,
-    borderBottom: "1px solid rgba(0,0,0,0.05)",
-    verticalAlign: "top" as const,
-  } as const,
-
+  td: { padding: 12, borderBottom: "1px solid rgba(0,0,0,0.05)", verticalAlign: "top" as const } as const,
   input: {
     width: "100%",
     padding: "10px 10px",
@@ -348,7 +289,6 @@ const styles = {
     outline: "none",
     fontSize: 14,
   } as const,
-
   inputBad: {
     width: "100%",
     padding: "10px 10px",
@@ -359,22 +299,8 @@ const styles = {
     outline: "none",
     fontSize: 14,
   } as const,
-
-  smallError: {
-    marginTop: 6,
-    fontSize: 12,
-    color: "rgba(220,38,38,0.9)",
-  } as const,
-
-  whatif: {
-    display: "flex",
-    gap: 12,
-    flexWrap: "wrap" as const,
-    alignItems: "center",
-    justifyContent: "center",
-    marginTop: 10,
-  } as const,
-
+  smallError: { marginTop: 6, fontSize: 12, color: "rgba(220,38,38,0.9)" } as const,
+  whatif: { display: "flex", gap: 12, flexWrap: "wrap" as const, alignItems: "center", justifyContent: "center", marginTop: 10 } as const,
   select: {
     padding: "10px 10px",
     borderRadius: "var(--r-sm)",
@@ -385,14 +311,7 @@ const styles = {
     maxWidth: 520,
     fontSize: 14,
   } as const,
-
-  hint: {
-    fontSize: 12,
-    color: "rgba(29,29,31,0.55)",
-    textAlign: "center" as const,
-    marginTop: 10,
-  } as const,
-
+  hint: { fontSize: 12, color: "rgba(29,29,31,0.55)", textAlign: "center" as const, marginTop: 10 } as const,
   sheet: {
     margin: "12px auto 0",
     maxWidth: 880,
@@ -404,24 +323,8 @@ const styles = {
     backdropFilter: "blur(16px) saturate(160%)",
     WebkitBackdropFilter: "blur(16px) saturate(160%)",
   } as const,
-
-  sheetTitle: {
-    fontSize: 13,
-    color: "rgba(29,29,31,0.78)",
-    textAlign: "center" as const,
-    marginBottom: 10,
-    lineHeight: 1.45,
-  } as const,
-
-  codeRow: {
-    display: "flex",
-    gap: 8,
-    justifyContent: "center",
-    alignItems: "center",
-    marginBottom: 10,
-    flexWrap: "wrap" as const,
-  } as const,
-
+  sheetTitle: { fontSize: 13, color: "rgba(29,29,31,0.78)", textAlign: "center" as const, marginBottom: 10, lineHeight: 1.45 } as const,
+  codeRow: { display: "flex", gap: 8, justifyContent: "center", alignItems: "center", marginBottom: 10, flexWrap: "wrap" as const } as const,
   codeBox: {
     width: 64,
     textAlign: "center" as const,
@@ -434,20 +337,8 @@ const styles = {
     fontSize: 16,
     letterSpacing: 1.2,
   } as const,
-
-  slash: {
-    fontSize: 16,
-    color: "rgba(29,29,31,0.55)",
-  } as const,
-
-  promptTop: {
-    marginTop: 10,
-    textAlign: "center" as const,
-    fontSize: 13,
-    color: "rgba(29,29,31,0.78)",
-    lineHeight: 1.45,
-  } as const,
-
+  slash: { fontSize: 16, color: "rgba(29,29,31,0.55)" } as const,
+  promptTop: { marginTop: 10, textAlign: "center" as const, fontSize: 13, color: "rgba(29,29,31,0.78)", lineHeight: 1.45 } as const,
   promptBox: {
     marginTop: 10,
     padding: 12,
@@ -459,21 +350,8 @@ const styles = {
     lineHeight: 1.45,
     whiteSpace: "pre-wrap" as const,
   } as const,
-
-  promptBottom: {
-    marginTop: 10,
-    textAlign: "center" as const,
-    fontSize: 13,
-    color: "rgba(29,29,31,0.72)",
-    lineHeight: 1.45,
-  } as const,
-
-  divider: {
-    height: 1,
-    background: "rgba(0,0,0,0.08)",
-    margin: "12px 0",
-  } as const,
-
+  promptBottom: { marginTop: 10, textAlign: "center" as const, fontSize: 13, color: "rgba(29,29,31,0.72)", lineHeight: 1.45 } as const,
+  divider: { height: 1, background: "rgba(0,0,0,0.08)", margin: "12px 0" } as const,
   modalBackdrop: {
     position: "fixed" as const,
     inset: 0,
@@ -486,7 +364,6 @@ const styles = {
     backdropFilter: "blur(10px)",
     WebkitBackdropFilter: "blur(10px)",
   } as const,
-
   modalCard: {
     width: "min(980px, 100%)",
     maxHeight: "min(82vh, 900px)",
@@ -527,7 +404,6 @@ export default function App() {
   const [whatIfGrade, setWhatIfGrade] = useState<string>("28");
   const [status, setStatus] = useState<string>("");
 
-  // NEW: status auto-clear timer (solo per success “pulito”)
   const statusTimerRef = useRef<number | null>(null);
   function flashStatus(msg: string, ms = 1600) {
     setStatus(msg);
@@ -555,7 +431,6 @@ export default function App() {
   const [lookupMessage, setLookupMessage] = useState<string>("");
   const [foundPlan, setFoundPlan] = useState<PlanDoc | null>(null);
 
-  // Selezione per indice (evita effetto cascata se codici ripetuti)
   const [selectedIdx, setSelectedIdx] = useState<Set<number>>(new Set());
 
   const xxNum = useMemo(() => parseCoursePart(courseXX), [courseXX]);
@@ -576,7 +451,6 @@ export default function App() {
     return weightedAverage(simulated);
   }, [exams, whatIfExamId, whatIfGrade, currentAvg]);
 
-  // Persist
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(exams));
@@ -585,14 +459,12 @@ export default function App() {
     }
   }, [exams]);
 
-  // What-if: se l'id selezionato non esiste più, riallinea
   useEffect(() => {
     const ids = new Set(exams.map((e) => e.id));
     if (whatIfExamId && ids.has(whatIfExamId)) return;
     setWhatIfExamId(exams[0]?.id ?? "");
   }, [exams, whatIfExamId]);
 
-  // Lock scroll quando modal aperto
   useEffect(() => {
     if (!lookupOpen) return;
     const prev = document.body.style.overflow;
@@ -663,37 +535,46 @@ export default function App() {
       throw new Error("CSV valido ma nessuna riga utile (Codice/Denominazione/CFU vuoti?).");
     }
 
+    // Carica SEMPRE il piano in UI (utile anche se non si può salvare)
     const next: Exam[] = planRows.map((p) => ({
       id: makeId(),
       name: p.denominazione,
       cfu: p.cfu,
       grade: "",
     }));
-
     setExams(next);
-    setStatus(`Verifico il piano ${code}...`);
 
+    // Ora: vietato sovrascrivere. Se esiste già, stop.
+    setStatus(`Verifico il piano ${code}...`);
     const checkRes = await apiGetPlan(code);
 
     if (checkRes.ok) {
-      const yes = window.confirm(`Il piano ${code} esiste già. Vuoi sovrascrivere?`);
-      if (!yes) {
-        setStatus("Piano caricato in UI, ma NON salvato(annullato).");
-        return;
-      }
+      setStatus(
+        `Piano ${code} già presente nella memoria condivisa: non può essere sovrascritto.\n` +
+          `Il piano è stato comunque caricato in UI (locale).`
+      );
+      return;
     } else if (checkRes.status !== 404) {
       const txt = await checkRes.text().catch(() => "");
       throw new Error(`Errore verifica (${checkRes.status}): ${txt}`);
     }
 
     setStatus(`Salvataggio (${code})...`);
-
     const { res: saveRes, json } = await apiSavePlan(code, planRows);
+
+    if (saveRes.status === 409) {
+      // backend blocca sovrascrittura: comportamento atteso
+      setStatus(
+        `Piano ${code} già presente nella memoria condivisa: non può essere sovrascritto.\n` +
+          `Il piano è stato comunque caricato in UI (locale).`
+      );
+      return;
+    }
+
     if (!saveRes.ok || !json?.ok) {
       throw new Error(`Errore salvataggio API: ${JSON.stringify(json)}`);
     }
 
-    // CHANGED: niente “Caricato su Supabase ...” fisso (feedback pulito e temporaneo)
     flashStatus("Piano salvato.");
   }
 
@@ -828,9 +709,7 @@ export default function App() {
 
       const merged = [...prev, ...toAdd];
       const skipped = selected.length - toAdd.length;
-      setStatus(
-        `Aggiunti ${toAdd.length} esami dal piano ${plan.code}` + (skipped > 0 ? ` (saltati ${skipped} duplicati).` : ".")
-      );
+      setStatus(`Aggiunti ${toAdd.length} esami dal piano ${plan.code}` + (skipped > 0 ? ` (saltati ${skipped} duplicati).` : "."));
       return merged;
     });
   }
@@ -876,9 +755,7 @@ export default function App() {
 
           {helpOpen && (
             <div style={styles.sheet}>
-              <div style={styles.sheetTitle}>
-                Qual è il codice del corso? (Es. Matr: 70/89/00000, il codice del corso è 70/89)
-              </div>
+              <div style={styles.sheetTitle}>Qual è il codice del corso? (Es. Matr: 70/89/00000, il codice del corso è 70/89)</div>
 
               <div style={styles.codeRow}>
                 <input
@@ -907,8 +784,7 @@ export default function App() {
               {courseOk ? (
                 <>
                   <div style={styles.promptTop}>
-                    Prepara screenshot con codici, insegnamenti e CFU. Caricali su un’AI e chiedi di generare il file usando
-                    la domanda qui sotto.
+                    Prepara screenshot con codici, insegnamenti e CFU. Caricali su un’AI e chiedi di generare il file usando la domanda qui sotto.
                   </div>
                   <div style={styles.promptBox}>
                     <em>{buildUserPrompt(xxNum!, yyNum!)}</em>
@@ -998,12 +874,7 @@ export default function App() {
             <label>
               <span style={{ fontSize: 13, color: "rgba(29,29,31,0.75)" }}>Esame</span>
               <div style={{ height: 6 }} />
-              <select
-                className="umWhatifSelect"
-                style={styles.select}
-                value={whatIfExamId}
-                onChange={(e) => setWhatIfExamId(e.target.value)}
-              >
+              <select className="umWhatifSelect" style={styles.select} value={whatIfExamId} onChange={(e) => setWhatIfExamId(e.target.value)}>
                 {exams.map((e) => (
                   <option key={e.id} value={e.id}>
                     {e.name} ({e.cfu} CFU)
