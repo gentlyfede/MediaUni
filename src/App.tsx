@@ -5,7 +5,7 @@ type Exam = {
   id: string;
   name: string;
   cfu: number;
-  grade: string; // vuoto = non dato
+  grade: string; // vuoto
 };
 
 type PlanRow = {
@@ -938,7 +938,7 @@ export default function App() {
           <div style={styles.sectionTitle}>Esami</div>
 
           <div style={styles.tableWrap}>
-            <table className="table" style={styles.table}>
+            <table className="table umExamsTable" style={styles.table}>
               <thead>
                 <tr>
                   <th style={styles.th}>Nome</th>
@@ -973,7 +973,7 @@ export default function App() {
                         <input
                           inputMode="numeric"
                           value={e.grade}
-                          placeholder="(vuoto = non dato)"
+                          placeholder="(vuoto)"
                           onChange={(ev) => updateExam(e.id, { grade: ev.target.value })}
                           style={gradeOk ? styles.input : styles.inputBad}
                         />
@@ -994,11 +994,16 @@ export default function App() {
 
           <div style={styles.sectionTitle}>Simulatore “what‑if”</div>
 
-          <div style={styles.whatif}>
+          <div style={styles.whatif} className="umWhatif">
             <label>
               <span style={{ fontSize: 13, color: "rgba(29,29,31,0.75)" }}>Esame</span>
               <div style={{ height: 6 }} />
-              <select style={styles.select} value={whatIfExamId} onChange={(e) => setWhatIfExamId(e.target.value)}>
+              <select
+                className="umWhatifSelect"
+                style={styles.select}
+                value={whatIfExamId}
+                onChange={(e) => setWhatIfExamId(e.target.value)}
+              >
                 {exams.map((e) => (
                   <option key={e.id} value={e.id}>
                     {e.name} ({e.cfu} CFU)
@@ -1011,6 +1016,7 @@ export default function App() {
               <span style={{ fontSize: 13, color: "rgba(29,29,31,0.75)" }}>Voto ipotetico</span>
               <div style={{ height: 6 }} />
               <input
+                className="umWhatifGrade"
                 style={{ ...styles.input, width: 140 }}
                 inputMode="numeric"
                 value={whatIfGrade}
@@ -1031,7 +1037,6 @@ export default function App() {
           }}
         >
           <div style={styles.modalCard}>
-            {/* CHANGED: micro-hint Apple-style (senza rovinare la UI) */}
             <div style={styles.sheetTitle}>
               <div>Cerca un piano già caricato e scegli quali esami importare.</div>
               <div style={{ marginTop: 6, fontSize: 12, color: "rgba(29,29,31,0.62)" }}>
@@ -1094,7 +1099,7 @@ export default function App() {
                 <div style={{ height: 10 }} />
 
                 <div style={styles.tableWrap}>
-                  <table className="table" style={styles.table}>
+                  <table className="table umPlanTable" style={styles.table}>
                     <thead>
                       <tr>
                         <th style={{ ...styles.th, width: 110 }}>Aggiungi</th>

@@ -103,8 +103,91 @@ input, select, textarea{
   *{ transition: none !important; scroll-behavior: auto !important; }
 }
 
-/* Responsive helpers (if you kept .cards/.table classnames) */
+/* Mobile-only responsive fixes */
 @media (max-width: 720px){
+  /* Keep your cards stack */
   .cards { grid-template-columns: 1fr !important; }
-  .table { min-width: 620px !important; }
+
+  /* (1) Tabella Esami: niente scroll orizzontale, colonne più strette */
+  .umExamsTable{
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+  .umExamsTable th,
+  .umExamsTable td{
+    padding: 10px !important;
+  }
+  .umExamsTable th:nth-child(2),
+  .umExamsTable td:nth-child(2){
+    width: 76px !important; /* CFU più corta */
+  }
+  .umExamsTable th:nth-child(3),
+  .umExamsTable td:nth-child(3){
+    width: 80px !important; /* Voto */
+  }
+  .umExamsTable th:nth-child(4),
+  .umExamsTable td:nth-child(4){
+    width: 92px !important; /* Rimuovi */
+  }
+  .umExamsTable td:nth-child(1){
+    min-width: 0 !important;
+  }
+  .umExamsTable td:nth-child(1) input{
+    min-width: 0 !important;
+  }
+  .umExamsTable input{
+    box-sizing: border-box !important;
+    padding: 9px 8px !important;
+  }
+
+  /* (2) What-if: impedisci che la select “scappi” e tagli il testo */
+  .umWhatif{
+    flex-direction: column !important;
+    align-items: stretch !important;
+  }
+  .umWhatif label{
+    width: 100% !important;
+  }
+  .umWhatifSelect{
+    width: 100% !important;
+    max-width: 100% !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    box-sizing: border-box !important;
+  }
+  .umWhatifGrade{
+    width: 100% !important;
+    box-sizing: border-box !important;
+  }
+
+  /* (3) Modal import piano: nascondi “Codice” e fai vedere CFU */
+  .umPlanTable{
+    min-width: 0 !important;
+    width: 100% !important;
+    table-layout: fixed !important;
+  }
+  .umPlanTable th,
+  .umPlanTable td{
+    padding: 10px !important;
+  }
+  .umPlanTable th:nth-child(2),
+  .umPlanTable td:nth-child(2){
+    display: none !important; /* sopprimi Codice su mobile */
+  }
+  .umPlanTable th:nth-child(1),
+  .umPlanTable td:nth-child(1){
+    width: 96px !important; /* Aggiungi */
+  }
+  .umPlanTable th:nth-child(4),
+  .umPlanTable td:nth-child(4){
+    width: 70px !important; /* CFU visibile */
+    text-align: center !important;
+  }
+  .umPlanTable td:nth-child(3){
+    white-space: normal !important;
+    overflow-wrap: anywhere !important;
+    word-break: break-word !important;
+  }
 }
